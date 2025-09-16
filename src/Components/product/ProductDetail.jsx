@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import RelatedProducts from "./RelatedProducts.jsx";
 
 const ProductDetail = () => {
   const url = "http://localhost:3000/api";
@@ -33,6 +34,7 @@ const ProductDetail = () => {
   }
 
   return (
+   <>
     <div className="flex justify-center items-center h-screen p-4 -mt-52">
       <div className="flex flex-col md:flex-row items-center gap-8 border rounded-lg p-6 shadow-lg max-w-3xl ">
         
@@ -60,6 +62,9 @@ const ProductDetail = () => {
 
       </div>
     </div>
+    <RelatedProducts category={product?.category}/>
+   </>
+
   );
 };
 
