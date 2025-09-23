@@ -14,9 +14,9 @@ const RelatedProducts = ({ category }) => {
 
   return (
     <>
-      <div className="container text-center ">
-        <h1>Related Product</h1>
-        <div className="flex flex-wrap justify-center gap-5 p-8">
+      <div className="container text-center  ">
+        <h1 className="text-3xl font-bold mt-10 ml-82">Related Product</h1>
+        <div className="flex flex-wrap justify-center gap-5 p-8 ">
           {relatedProduct.map((product) => (
             <div
               className="w-[200px] h-[275px] border border-gray-200 rounded-md overflow-hidden hover:shadow-lg transition-shadow duration-300"

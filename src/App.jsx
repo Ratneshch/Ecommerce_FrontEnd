@@ -8,6 +8,8 @@ import SearchProduct from "./Components/product/searchProduct";
 import Register from "./Components/user/Register";
  import { ToastContainer, toast } from 'react-toastify';
 import Login from "./Components/user/Login";
+import Profile from "./Components/user/Profile";
+import ProductCart from "./Components/product/ProductCart";
 
 const App = () => {
   return (
@@ -21,6 +23,8 @@ const App = () => {
            <Route path="/products/search/:term" element={<SearchProduct/>}/>
            <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+             <Route path="/profile" element={<Profile />} />
+             <Route path="/cart" element={<ProductCart/>}/>
         </Routes>
       </Router>
     </>
