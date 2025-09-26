@@ -17,6 +17,10 @@ const AppState = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
 
+  // Shipping Address
+  const [shippingAddress, setShippingAddress] = useState(null);
+  const [addressLoading, setAddressLoading] = useState(false);
+
   // Fetch products
   useEffect(() => {
     const fetchProducts = async () => {
@@ -42,6 +46,7 @@ const AppState = ({ children }) => {
         setUser(res.data.user || res.data);
         setIsAuthenticated(true);
         fetchCart();
+        fetchShippingAddress();
       } catch {
         logout();
       }
@@ -63,7 +68,45 @@ const AppState = ({ children }) => {
     }
   };
 
-  // Add to cart
+  // Shipping Address Functions
+  const fetchShippingAddress = async () => {
+    if (!user?.id || !token) return;
+    try {
+      setAddressLoading(true);
+      const res = await axios.get(`${url}/address/${user.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setShippingAddress(res.data);
+    } catch (err) {
+      if (err.response && err.response.status === 404) {
+        setShippingAddress(null);
+      } else {
+        console.error("Error fetching address:", err);
+      }
+    } finally {
+      setAddressLoading(false);
+    }
+  };
+
+  const saveShippingAddress = async (addressData) => {
+    if (!user?.id || !token) return false;
+    try {
+      setAddressLoading(true);
+      const payload = { ...addressData, user_id: user.id };
+      await axios.post(`${url}/address`, payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setShippingAddress(payload);
+      return true;
+    } catch (err) {
+      console.error("Error saving address:", err);
+      return false;
+    } finally {
+      setAddressLoading(false);
+    }
+  };
+
+  // Cart Functions
   const addToCart = async (productID, quantity = 1) => {
     if (!token) {
       toast.error("Please login first", { autoClose: 1500, theme: "dark" });
@@ -121,7 +164,6 @@ const AppState = ({ children }) => {
     }
   };
 
-  // Update cart quantity
   const updateCartQty = async (productID, quantity) => {
     if (!token || quantity <= 0) return removeFromCart(productID);
 
@@ -149,7 +191,6 @@ const AppState = ({ children }) => {
     }
   };
 
-  // Remove item
   const removeFromCart = async (productID) => {
     if (!token) return;
     const item = cart.find((i) => i.product_id === productID);
@@ -202,6 +243,7 @@ const AppState = ({ children }) => {
         transition: Bounce,
       });
       fetchCart();
+      fetchShippingAddress();
       return { success: true, message: res.data.message };
     } catch (err) {
       const message = err.response?.data?.message || "Login failed";
@@ -218,6 +260,7 @@ const AppState = ({ children }) => {
     setUser(null);
     setCart([]);
     setTotalAmount(0);
+    setShippingAddress(null);
     toast.info("Logged out successfully", { autoClose: 1500, theme: "dark", transition: Bounce });
   };
 
@@ -239,6 +282,11 @@ const AppState = ({ children }) => {
         register,
         login,
         logout,
+        // Shipping Address
+        shippingAddress,
+        saveShippingAddress,
+        fetchShippingAddress,
+        addressLoading,
       }}
     >
       {children}

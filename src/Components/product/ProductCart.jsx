@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import AppContext from "../../context/AppContext";
+import { Link } from "react-router-dom";
 
 export default function ProductCart() {
   const { cart, totalAmount, updateCartQty, removeFromCart } = useContext(AppContext);
@@ -58,13 +59,23 @@ export default function ProductCart() {
         </div>
 
         {/* Summary */}
-        <aside className="bg-white rounded-lg shadow p-5">
-          <h4 className="text-lg font-medium mb-3">Order Summary</h4>
-          <div className="border-t my-3"></div>
-          <div className="flex justify-between font-semibold text-lg">
-            <span>Total</span>
-            <span>₹{totalAmount}</span>
+        <aside className="bg-white rounded-lg shadow p-5 flex flex-col justify-between">
+          <div>
+            <h4 className="text-lg font-medium mb-3">Order Summary</h4>
+            <div className="border-t my-3"></div>
+            <div className="flex justify-between font-semibold text-lg">
+              <span>Total</span>
+              <span>₹{totalAmount}</span>
+            </div>
           </div>
+
+          {/* Checkout Button */}
+          <Link
+            to="/checkout"
+            className="mt-4 bg-green-600 hover:bg-green-700 text-white py-3 text-center rounded-lg font-semibold"
+          >
+            Proceed to Checkout
+          </Link>
         </aside>
       </div>
     </div>
